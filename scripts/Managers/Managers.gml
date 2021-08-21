@@ -1,0 +1,1 @@
+global.pVertexFormatManager = new VertexFormatManager();

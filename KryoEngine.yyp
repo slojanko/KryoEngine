@@ -1,12 +1,13 @@
 {
   "resources": [
     {"id":{"name":"test_obj","path":"objects/test_obj/test_obj.yy",},"order":0,},
-    {"id":{"name":"VertexFormat_impl","path":"scripts/VertexFormat_impl/VertexFormat_impl.yy",},"order":2,},
+    {"id":{"name":"VertexFormatContainer_impl","path":"scripts/VertexFormatContainer_impl/VertexFormatContainer_impl.yy",},"order":3,},
     {"id":{"name":"Scene_impl","path":"scripts/Scene_impl/Scene_impl.yy",},"order":1,},
     {"id":{"name":"glTF_impl","path":"scripts/glTF_impl/glTF_impl.yy",},"order":2,},
     {"id":{"name":"Mesh_impl","path":"scripts/Mesh_impl/Mesh_impl.yy",},"order":3,},
     {"id":{"name":"test_shd","path":"shaders/test_shd/test_shd.yy",},"order":0,},
-    {"id":{"name":"global_formats","path":"scripts/global_formats/global_formats.yy",},"order":1,},
+    {"id":{"name":"VertexFormatManager_impl","path":"scripts/VertexFormatManager_impl/VertexFormatManager_impl.yy",},"order":2,},
+    {"id":{"name":"Managers","path":"scripts/Managers/Managers.yy",},"order":1,},
     {"id":{"name":"glTF_utils","path":"scripts/glTF_utils/glTF_utils.yy",},"order":5,},
     {"id":{"name":"Profiler_impl","path":"scripts/Profiler_impl/Profiler_impl.yy",},"order":0,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
@@ -43,7 +44,7 @@
     {"folderPath":"folders/Animation Curves.yy","order":12,"resourceVersion":"1.0","name":"Animation Curves","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Notes.yy","order":13,"resourceVersion":"1.0","name":"Notes","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Extensions.yy","order":14,"resourceVersion":"1.0","name":"Extensions","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Scripts/glTF.yy","order":3,"resourceVersion":"1.0","name":"glTF","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Scripts/glTF.yy","order":4,"resourceVersion":"1.0","name":"glTF","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
@@ -54,6 +55,8 @@
   "IncludedFiles": [
     {"CopyToMask":153157610357391598,"filePath":"datafiles","resourceVersion":"1.0","name":"Box.gltf","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"Box0.bin","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"untitled.gltf","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"untitled.bin","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.3.574",

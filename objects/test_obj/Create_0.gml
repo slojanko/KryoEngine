@@ -1,1 +1,1 @@
-Box = new glTF("Box.gltf");
+Box = new glTF("untitled.gltf");

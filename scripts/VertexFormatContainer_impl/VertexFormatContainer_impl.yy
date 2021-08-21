@@ -6,7 +6,7 @@
     "path": "folders/Scripts.yy",
   },
   "resourceVersion": "1.0",
-  "name": "global_formats",
+  "name": "VertexFormatContainer_impl",
   "tags": [],
   "resourceType": "GMScript",
 }

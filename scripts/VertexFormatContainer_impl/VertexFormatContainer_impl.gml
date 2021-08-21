@@ -1,4 +1,4 @@
-function VertexFormat(types, usages) constructor {
+function VertexFormatContainer(types, usages) constructor {
 	vertex_types = types;
 	vertex_usages = usages;
 	
@@ -13,8 +13,17 @@ function VertexFormat(types, usages) constructor {
 			return false;
 		}
 		
-		for(var i = array_length(types) - 1; i >= 0; i--) {
-			if (vertex_types[i] != types[i] || vertex_usages[i] != usages[i]) {
+		var count = array_length(types);
+		for(var i = 0; i < count; i++) {
+			var match = false;
+			for(var j = 0; j < count; j++) {
+				if (vertex_types[j] == types[i] && vertex_usages[j] == types[i]) {
+					match = true;
+					break;
+				}
+			}
+			
+			if (!match) {
 				return false;
 			}
 		}

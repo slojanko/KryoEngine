@@ -62,7 +62,7 @@ function ComponentTypeToBufferType(type) {
 	}
 }
 
-function ComponentTypeToElementSize(type) {
+function ComponentTypeToElementByteSize(type) {
 	switch(type) {
 		case 5120:
 			return 1;

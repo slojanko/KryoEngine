@@ -1,7 +1,8 @@
 struct VertexShaderInput
 {
     float4 vPosition : POSITION;
-	float4 vNorml    : NORMAL0;
+	float4 vColor : COLOR0;
+	//float4 vNorml    : NORMAL0;
 };
 
 struct VertexShaderOutput
@@ -17,7 +18,7 @@ VertexShaderOutput main(VertexShaderInput INPUT)
     float4 matrixWVP = mul(gm_Matrices[MATRIX_WORLD_VIEW_PROJECTION], INPUT.vPosition);
 
     OUTPUT.vPosition = matrixWVP;
-    OUTPUT.vColor = float4(1.0, 1.0, 1.0, 1.0);
+    OUTPUT.vColor = INPUT.vColor;
 
     return OUTPUT;
 }

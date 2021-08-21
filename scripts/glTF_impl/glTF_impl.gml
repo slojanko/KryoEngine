@@ -31,11 +31,7 @@ function glTF(filename) constructor {
 	
 		for(var i = 0; i < meshes_count; i++) {
 			var mesh = new Mesh();
-		
-			// Currently only first primitive is parsed
-			var primitive = json.meshes[i].primitives[0];
-			mesh.primitive = BuildPrimitive(primitive);
-		
+			mesh.primitive = BuildPrimitive(json.meshes[i].primitives[0]);
 			meshes[i] = mesh;
 		}
 		
@@ -49,15 +45,15 @@ function glTF(filename) constructor {
 		var indices_accessor = json.accessors[primitive.indices];
 		var indices_buffer_view = json.bufferViews[indices_accessor.bufferView];
 		var indices_buffer_type = ComponentTypeToBufferType(indices_accessor.componentType);
-		var indices_buffer_size = ComponentTypeToElementSize(indices_accessor.componentType);
+		var indices_element_byte_size = ComponentTypeToElementByteSize(indices_accessor.componentType);
 		
 		var vertex_buffer = vertex_create_buffer();
-		vertex_begin(vertex_buffer, GetVertexFormatInternal(primitive.attributes));
+		vertex_begin(vertex_buffer, GetVertexFormat(primitive.attributes));
 		
 		// Go through all indices
 		for(var i = 0; i < indices_accessor.count; i++) {
 			// Read index value
-			var indices_byte_offset = indices_buffer_view.byteOffset + indices_accessor.byteOffset + i * indices_buffer_size;
+			var indices_byte_offset = indices_buffer_view.byteOffset + indices_accessor.byteOffset + i * indices_element_byte_size;
 			buffer_seek(buffers[indices_buffer_view.buffer], buffer_seek_start, indices_byte_offset);
 			var indices_value = buffer_read(buffers[indices_buffer_view.buffer], indices_buffer_type);
 			
@@ -69,9 +65,9 @@ function glTF(filename) constructor {
 				var attribute_buffer_view = json.bufferViews[attribute_accessor.bufferView];
 				var attribute_number_of_components = AccessorTypeToNumberOfComponents(attribute_accessor.type);
 				var attribute_buffer_type = ComponentTypeToBufferType(attribute_accessor.componentType);
-				var attribute_buffer_size = ComponentTypeToElementSize(attribute_accessor.componentType);
+				var attribute_element_byte_size = ComponentTypeToElementByteSize(attribute_accessor.componentType);
 				
-				var attribute_byte_offset = attribute_buffer_view.byteOffset + attribute_accessor.byteOffset + indices_value * attribute_buffer_size;
+				var attribute_byte_offset = attribute_buffer_view.byteOffset + attribute_accessor.byteOffset + indices_value * attribute_number_of_components * attribute_element_byte_size;
 				buffer_seek(buffers[attribute_buffer_view.buffer], buffer_seek_start, attribute_byte_offset);
 				
 				var data = array_create(attribute_number_of_components);
@@ -100,12 +96,11 @@ function glTF(filename) constructor {
 		return vertex_buffer;
 	}
 
-	static GetVertexFormatInternal = function(attributes) {		
+	static GetVertexFormat = function(attributes) {		
 		var attributes_names = variable_struct_get_names(attributes);
 		var attributes_count = array_length(attributes_names);
 		var types = array_create(attributes_count);
 		var usages = array_create(attributes_count);
-		var vertex_format;
 	
 		for(var j = 0; j < attributes_count; j++) {
 			var accessor = json.accessors[variable_struct_get(attributes, attributes_names[j])];
@@ -113,7 +108,7 @@ function glTF(filename) constructor {
 			usages[j] = AttributeToVertexUsage(attributes_names[j]);
 		}
 	
-		var vertex_format = GetVertexFormat(types, usages);
-		return vertex_format.vertex_format;
+		var vertex_format_container = global.pVertexFormatManager.GetVertexFormatContainer(types, usages);
+		return vertex_format_container.vertex_format;
 	}
 }
