@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"struct_utils","path":"scripts/struct_utils/struct_utils.yy",},"order":6,},
     {"id":{"name":"test_obj","path":"objects/test_obj/test_obj.yy",},"order":0,},
     {"id":{"name":"VertexFormatContainer_impl","path":"scripts/VertexFormatContainer_impl/VertexFormatContainer_impl.yy",},"order":3,},
     {"id":{"name":"Scene_impl","path":"scripts/Scene_impl/Scene_impl.yy",},"order":1,},

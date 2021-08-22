@@ -33,10 +33,14 @@ function AttributeToVertexUsage(attribute) {
 		case "POSITION": 
 			return vertex_usage_position;
 		case "TEXCOORD":
+		case "TEXCOORD_0":
+		case "TEXCOORD_1":
 			return vertex_usage_texcoord;
 		case "NORMAL": 
 			return vertex_usage_normal;
 		case "COLOR": 
+		case "COLOR_0":
+		case "COLOR_1":
 			return vertex_usage_color;
 		default:
 			return vertex_usage_texcoord;
@@ -57,6 +61,25 @@ function ComponentTypeToBufferType(type) {
 			return buffer_u32;
 		case 5126:
 			return buffer_f32;
+		default:
+			throw("ComponentType not supported");
+	}
+}
+
+function ComponentTypeNormalized(type, value) {
+	switch(type) {
+		case 5120:
+			return max(value / 127, -1.0);
+		case 5121:
+			return value / 255;
+		case 5122:
+			return max(value / 32767, -1.0);
+		case 5123:
+			return value / 65535;
+		case 5125:
+			return value / 4294967295;
+		case 5126:
+			return value;
 		default:
 			throw("ComponentType not supported");
 	}

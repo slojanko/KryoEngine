@@ -11,7 +11,21 @@ function glTF(filename) constructor {
 		buffer_delete(buffer);
 	
 		var json = json_parse(text_from_buffer);
+		AddDefaults(json);
 		return json;
+	}
+	
+	static AddDefaults = function(json) {
+		var accessors_count = array_length(json.accessors);
+		for(var i = 0; i < accessors_count; i++) {
+			StructTrySetDefault(json.accessors[i], "byteOffset", 0);
+			StructTrySetDefault(json.accessors[i], "normalized", false);
+		}
+		
+		var bufferviews_count = array_length(json.bufferViews);
+		for(var i = 0; i < bufferviews_count; i++) {
+			StructTrySetDefault(json.bufferViews[i], "byteOffset", 0);
+		}
 	}
 	
 	static LoadBuffers = function() {
@@ -72,7 +86,7 @@ function glTF(filename) constructor {
 				
 				var data = array_create(attribute_number_of_components);
 				for(var k = 0; k < attribute_number_of_components; k++) {
-					data[k] = buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type);
+					data[k] = ComponentTypeNormalized(attribute_accessor.componentType, buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type));
 				}
 				
 				switch(attribute_number_of_components) {
