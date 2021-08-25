@@ -67,17 +67,9 @@ function glTF(filename) constructor {
 		// Go through all indices
 		for(var i = 0; i < indices_accessor.count; i++) {
 			// Read index value
-			var real_i = i;
-			if ((i + 1) mod 3 == 0) {
-				real_i--;
-			} else if ((i + 2) mod 3 == 0) {
-				real_i++;
-			}
 			var indices_byte_offset = indices_buffer_view.byteOffset + indices_accessor.byteOffset + i * indices_element_byte_size;
 			buffer_seek(buffers[indices_buffer_view.buffer], buffer_seek_start, indices_byte_offset);
 			var indices_value = buffer_read(buffers[indices_buffer_view.buffer], indices_buffer_type);
-		
-			// show_debug_message(indices_value);
 			
 			// Go through all attributes
 			for(var j = 0; j < attributes_count; j++) {
