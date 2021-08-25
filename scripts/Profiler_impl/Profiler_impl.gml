@@ -1,7 +1,7 @@
 enum ProfilerFormat {
 	s = 1000000, 
 	ms = 1000, 
-	ns = 1
+	us = 1
 }
 
 function Profiler() constructor {
@@ -43,5 +43,9 @@ function Profiler() constructor {
 	
 	static GetLongestTime = function(profiler_format_) {
 		return longest_time_taken / profiler_format_;
+	}
+	
+	static toString = function() {
+		return "Time: " + string(GetTime(ProfilerFormat.us)) + " us";
 	}
 }

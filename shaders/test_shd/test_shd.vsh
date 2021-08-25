@@ -19,6 +19,7 @@ VertexShaderOutput main(VertexShaderInput INPUT)
 
     OUTPUT.vPosition = matrixWVP;
     OUTPUT.vColor = INPUT.vColor;
+	OUTPUT.vColor.a = 1.0;
 
     return OUTPUT;
 }

@@ -1,5 +1,6 @@
 function glTF(filename) constructor {
 	json = LoadJson(filename);
+	AddDefaults(json);
 	buffers = LoadBuffers();
 	meshes = LoadMeshes();
 
@@ -11,7 +12,6 @@ function glTF(filename) constructor {
 		buffer_delete(buffer);
 	
 		var json = json_parse(text_from_buffer);
-		AddDefaults(json);
 		return json;
 	}
 	
@@ -67,9 +67,17 @@ function glTF(filename) constructor {
 		// Go through all indices
 		for(var i = 0; i < indices_accessor.count; i++) {
 			// Read index value
+			var real_i = i;
+			if ((i + 1) mod 3 == 0) {
+				real_i--;
+			} else if ((i + 2) mod 3 == 0) {
+				real_i++;
+			}
 			var indices_byte_offset = indices_buffer_view.byteOffset + indices_accessor.byteOffset + i * indices_element_byte_size;
 			buffer_seek(buffers[indices_buffer_view.buffer], buffer_seek_start, indices_byte_offset);
 			var indices_value = buffer_read(buffers[indices_buffer_view.buffer], indices_buffer_type);
+		
+			// show_debug_message(indices_value);
 			
 			// Go through all attributes
 			for(var j = 0; j < attributes_count; j++) {
@@ -86,7 +94,10 @@ function glTF(filename) constructor {
 				
 				var data = array_create(attribute_number_of_components);
 				for(var k = 0; k < attribute_number_of_components; k++) {
-					data[k] = ComponentTypeNormalized(attribute_accessor.componentType, buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type));
+					if (attribute_accessor.normalized) 
+						data[k] = ComponentTypeNormalized(attribute_accessor.componentType, buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type));
+					else 
+						data[k] = buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type);
 				}
 				
 				switch(attribute_number_of_components) {
@@ -97,7 +108,7 @@ function glTF(filename) constructor {
 						vertex_float2(vertex_buffer, data[0], data[1]);
 						break;
 					case 3:
-						vertex_float3(vertex_buffer, data[0], data[1], data[2]);
+						vertex_float3(vertex_buffer, data[0], -data[1], -data[2]);
 						break;
 					case 4:
 						vertex_float4(vertex_buffer, data[0], data[1], data[2], data[3]);
