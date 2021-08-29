@@ -53,47 +53,65 @@ function glTF(filename) constructor {
 	}
 
 	static BuildPrimitive = function(primitive) {
+		// Speedup
 		var data = array_create(4);
-				
+		var accessor;
+		
+		// Indices
+		accessor = json.accessors[primitive.indices];
+		var indices = {
+			accessor : accessor,
+			buffer_view : json.bufferViews[accessor.bufferView],
+			buffer_type : ComponentTypeToBufferType(accessor.componentType),
+			element_byte_size : ComponentTypeToElementByteSize(accessor.componentType)
+		};
+		
+		// Attributes
 		var attributes_names = variable_struct_get_names(primitive.attributes);
 		var attributes_count = array_length(attributes_names);
+		array_sort(attributes_names, function(el_left, el_right)
+	    {
+			return AttributeToOrderId(el_left) - AttributeToOrderId(el_right);
+	    });
+		
+		var attributes = array_create(attributes_count);
+		for(var i = 0; i < attributes_count; i++) {
+			accessor = json.accessors[variable_struct_get(primitive.attributes, attributes_names[i])];
+			var attribute = {
+				accessor : accessor,
+				buffer_view : json.bufferViews[accessor.bufferView],
+				number_of_components : AccessorTypeToNumberOfComponents(accessor.type),
+				buffer_type : ComponentTypeToBufferType(accessor.componentType),
+				element_byte_size : ComponentTypeToElementByteSize(accessor.componentType)
+			};
+			
+			attributes[i] = attribute;
+		}
 		
 		var vertex_buffer = vertex_create_buffer();
-		vertex_begin(vertex_buffer, GetVertexFormat(primitive.attributes));
-		
-		var indices_accessor = json.accessors[primitive.indices];
-		var indices_buffer_view = json.bufferViews[indices_accessor.bufferView];
-		var indices_buffer_type = ComponentTypeToBufferType(indices_accessor.componentType);
-		var indices_element_byte_size = ComponentTypeToElementByteSize(indices_accessor.componentType);
+		vertex_begin(vertex_buffer, GetVertexFormat(primitive.attributes, attributes_names));
 		
 		// Go through all indices
-		for(var i = 0; i < indices_accessor.count; i++) {
+		for(var i = 0; i < indices.accessor.count; i++) {
 			// Read index value
-			var indices_byte_offset = indices_buffer_view.byteOffset + indices_accessor.byteOffset + i * indices_element_byte_size;
-			buffer_seek(buffers[indices_buffer_view.buffer], buffer_seek_start, indices_byte_offset);
-			var indices_value = buffer_read(buffers[indices_buffer_view.buffer], indices_buffer_type);
+			var indices_byte_offset = indices.buffer_view.byteOffset + indices.accessor.byteOffset + i * indices.element_byte_size;
+			buffer_seek(buffers[indices.buffer_view.buffer], buffer_seek_start, indices_byte_offset);
+			var indices_value = buffer_read(buffers[indices.buffer_view.buffer], indices.buffer_type);
 			
 			// Go through all attributes
 			for(var j = 0; j < attributes_count; j++) {
-				var attribute = variable_struct_get(primitive.attributes, attributes_names[j]);
-				var attribute_accessor = json.accessors[attribute];
+				var attribute = attributes[j];
+				var attribute_byte_offset = attribute.buffer_view.byteOffset + attribute.accessor.byteOffset + indices_value * attribute.number_of_components * attribute.element_byte_size;
+				buffer_seek(buffers[attribute.buffer_view.buffer], buffer_seek_start, attribute_byte_offset);
 				
-				var attribute_buffer_view = json.bufferViews[attribute_accessor.bufferView];
-				var attribute_number_of_components = AccessorTypeToNumberOfComponents(attribute_accessor.type);
-				var attribute_buffer_type = ComponentTypeToBufferType(attribute_accessor.componentType);
-				var attribute_element_byte_size = ComponentTypeToElementByteSize(attribute_accessor.componentType);
-				
-				var attribute_byte_offset = attribute_buffer_view.byteOffset + attribute_accessor.byteOffset + indices_value * attribute_number_of_components * attribute_element_byte_size;
-				buffer_seek(buffers[attribute_buffer_view.buffer], buffer_seek_start, attribute_byte_offset);
-				
-				for(var k = 0; k < attribute_number_of_components; k++) {
-					if (attribute_accessor.normalized) 
-						data[k] = ComponentTypeNormalized(attribute_accessor.componentType, buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type));
+				for(var k = 0; k < attribute.number_of_components; k++) {
+					if (attribute.accessor.normalized) 
+						data[k] = ComponentTypeNormalized(attribute.accessor.componentType, buffer_read(buffers[attribute.buffer_view.buffer], attribute.buffer_type));
 					else 
-						data[k] = buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type);
+						data[k] = buffer_read(buffers[attribute.buffer_view.buffer], attribute.buffer_type);
 				}
 				
-				switch(attribute_number_of_components) {
+				switch(attribute.number_of_components) {
 					case 1:
 						vertex_float1(vertex_buffer, data[0]);
 						break;
@@ -114,8 +132,7 @@ function glTF(filename) constructor {
 		return vertex_buffer;
 	}
 
-	static GetVertexFormat = function(attributes) {		
-		var attributes_names = variable_struct_get_names(attributes);
+	static GetVertexFormat = function(attributes, attributes_names) {		
 		var attributes_count = array_length(attributes_names);
 		var types = array_create(attributes_count);
 		var usages = array_create(attributes_count);
