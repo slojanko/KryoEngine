@@ -3,7 +3,6 @@
     {"id":{"name":"struct_utils","path":"scripts/struct_utils/struct_utils.yy",},"order":6,},
     {"id":{"name":"test_obj","path":"objects/test_obj/test_obj.yy",},"order":0,},
     {"id":{"name":"VertexFormatContainer_impl","path":"scripts/VertexFormatContainer_impl/VertexFormatContainer_impl.yy",},"order":3,},
-    {"id":{"name":"Scene_impl","path":"scripts/Scene_impl/Scene_impl.yy",},"order":1,},
     {"id":{"name":"glTF_impl","path":"scripts/glTF_impl/glTF_impl.yy",},"order":2,},
     {"id":{"name":"Mesh_impl","path":"scripts/Mesh_impl/Mesh_impl.yy",},"order":3,},
     {"id":{"name":"test_shd","path":"shaders/test_shd/test_shd.yy",},"order":0,},
@@ -56,8 +55,10 @@
   "IncludedFiles": [
     {"CopyToMask":153157610357391598,"filePath":"datafiles","resourceVersion":"1.0","name":"Box.gltf","resourceType":"GMIncludedFile",},
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"Box0.bin","resourceType":"GMIncludedFile",},
-    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"untitled.gltf","resourceType":"GMIncludedFile",},
-    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"untitled.bin","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"car.gltf","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"car.bin","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"stress.bin","resourceType":"GMIncludedFile",},
+    {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"stress.gltf","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
     "IDEVersion": "2.3.3.574",
