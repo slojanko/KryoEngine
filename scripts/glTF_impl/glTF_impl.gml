@@ -56,6 +56,7 @@ function glTF(filename) constructor {
 		// Speedup
 		var data = array_create(4);
 		var accessor;
+		var position_index;
 		
 		// Indices
 		accessor = json.accessors[primitive.indices];
@@ -76,6 +77,10 @@ function glTF(filename) constructor {
 		
 		var attributes = array_create(attributes_count);
 		for(var i = 0; i < attributes_count; i++) {
+			if (attributes_names[i] == "POSITION") {
+				position_index = i;
+			}
+			
 			accessor = json.accessors[variable_struct_get(primitive.attributes, attributes_names[i])];
 			var attribute = {
 				accessor : accessor,
@@ -92,7 +97,7 @@ function glTF(filename) constructor {
 		vertex_begin(vertex_buffer, GetVertexFormat(primitive.attributes, attributes_names));
 		
 		// Go through all indices
-		for(var i = 0; i < indices.accessor.count; i++) {
+		for(var i = indices.accessor.count - 1; i >= 0; i--) {
 			// Read index value
 			var indices_byte_offset = indices.buffer_view.byteOffset + indices.accessor.byteOffset + i * indices.element_byte_size;
 			buffer_seek(buffers[indices.buffer_view.buffer], buffer_seek_start, indices_byte_offset);
@@ -104,11 +109,14 @@ function glTF(filename) constructor {
 				var attribute_byte_offset = attribute.buffer_view.byteOffset + attribute.accessor.byteOffset + indices_value * attribute.number_of_components * attribute.element_byte_size;
 				buffer_seek(buffers[attribute.buffer_view.buffer], buffer_seek_start, attribute_byte_offset);
 				
-				for(var k = 0; k < attribute.number_of_components; k++) {
-					if (attribute.accessor.normalized) 
+				if (attribute.accessor.normalized) {
+					for(var k = 0; k < attribute.number_of_components; k++) {
 						data[k] = ComponentTypeNormalized(attribute.accessor.componentType, buffer_read(buffers[attribute.buffer_view.buffer], attribute.buffer_type));
-					else 
+					}
+				} else {
+					for(var k = 0; k < attribute.number_of_components; k++) {
 						data[k] = buffer_read(buffers[attribute.buffer_view.buffer], attribute.buffer_type);
+					}
 				}
 				
 				switch(attribute.number_of_components) {
@@ -119,7 +127,12 @@ function glTF(filename) constructor {
 						vertex_float2(vertex_buffer, data[0], data[1]);
 						break;
 					case 3:
-						vertex_float3(vertex_buffer, data[0], -data[1], -data[2]);
+						// Position on Y/Z needs to be flipped
+						if (j == position_index) {
+							vertex_float3(vertex_buffer, data[0], -data[1], -data[2]);
+						} else {
+							vertex_float3(vertex_buffer, data[0], data[1], data[2]);
+						}
 						break;
 					case 4:
 						vertex_float4(vertex_buffer, data[0], data[1], data[2], data[3]);
