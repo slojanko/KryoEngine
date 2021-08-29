@@ -15,15 +15,7 @@ function VertexFormatContainer(types, usages) constructor {
 		
 		var count = array_length(types);
 		for(var i = 0; i < count; i++) {
-			var match = false;
-			for(var j = 0; j < count; j++) {
-				if (vertex_types[j] == types[i] && vertex_usages[j] == types[i]) {
-					match = true;
-					break;
-				}
-			}
-			
-			if (!match) {
+			if (vertex_types[j] != types[i] || vertex_usages[j] == types[i]) {
 				return false;
 			}
 		}

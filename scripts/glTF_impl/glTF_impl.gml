@@ -53,16 +53,18 @@ function glTF(filename) constructor {
 	}
 
 	static BuildPrimitive = function(primitive) {
+		var data = array_create(4);
+				
 		var attributes_names = variable_struct_get_names(primitive.attributes);
 		var attributes_count = array_length(attributes_names);
+		
+		var vertex_buffer = vertex_create_buffer();
+		vertex_begin(vertex_buffer, GetVertexFormat(primitive.attributes));
 		
 		var indices_accessor = json.accessors[primitive.indices];
 		var indices_buffer_view = json.bufferViews[indices_accessor.bufferView];
 		var indices_buffer_type = ComponentTypeToBufferType(indices_accessor.componentType);
 		var indices_element_byte_size = ComponentTypeToElementByteSize(indices_accessor.componentType);
-		
-		var vertex_buffer = vertex_create_buffer();
-		vertex_begin(vertex_buffer, GetVertexFormat(primitive.attributes));
 		
 		// Go through all indices
 		for(var i = 0; i < indices_accessor.count; i++) {
@@ -84,7 +86,6 @@ function glTF(filename) constructor {
 				var attribute_byte_offset = attribute_buffer_view.byteOffset + attribute_accessor.byteOffset + indices_value * attribute_number_of_components * attribute_element_byte_size;
 				buffer_seek(buffers[attribute_buffer_view.buffer], buffer_seek_start, attribute_byte_offset);
 				
-				var data = array_create(attribute_number_of_components);
 				for(var k = 0; k < attribute_number_of_components; k++) {
 					if (attribute_accessor.normalized) 
 						data[k] = ComponentTypeNormalized(attribute_accessor.componentType, buffer_read(buffers[attribute_buffer_view.buffer], attribute_buffer_type));

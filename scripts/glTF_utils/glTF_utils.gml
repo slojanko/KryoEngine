@@ -32,18 +32,59 @@ function AttributeToVertexUsage(attribute) {
 	switch(attribute) {
 		case "POSITION": 
 			return vertex_usage_position;
+		case "NORMAL":
+			return vertex_usage_normal;
+		case "TANGENT":
+			return vertex_usage_texcoord;
 		case "TEXCOORD":
 		case "TEXCOORD_0":
 		case "TEXCOORD_1":
 			return vertex_usage_texcoord;
-		case "NORMAL": 
-			return vertex_usage_normal;
 		case "COLOR": 
 		case "COLOR_0":
 		case "COLOR_1":
 			return vertex_usage_color;
-		default:
+		case "JOINTS":
+		case "JOINTS_0":
 			return vertex_usage_texcoord;
+		case "WEIGHTS":
+		case "WEIGHTS_0":
+			return vertex_usage_texcoord;
+		default:
+			throw("Attribute not supported");
+	}
+}
+
+function AttributeToOrderId(attribute) {
+	switch(attribute) {
+		case "POSITION": 
+			return 0;
+		case "NORMAL":
+			return 1
+		case "TANGENT":
+			return 2;
+		case "TEXCOORD":
+			return 3;
+		case "TEXCOORD_0":
+			return 4;
+		case "TEXCOORD_1":
+			return 5;
+		case "COLOR": 
+			return 6;
+		case "COLOR_0":
+			return 7;
+		case "COLOR_1":
+			return 8;
+		case "JOINTS":
+			return 9;
+		case "JOINTS_0":
+			return 10;
+		case "WEIGHTS":
+			return 11;
+		case "WEIGHTS_0":
+			return 12;
+		default:
+			throw("Attribute not supported");
 	}
 }
 
