@@ -3,7 +3,7 @@ gpu_set_ztestenable(true);
 
 prof = new Profiler();
 prof.Start();
-gltf = new glTF("stress.gltf");
+gltf = new glTF("car.gltf");
 prof.End();
 show_debug_message(prof);
 

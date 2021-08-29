@@ -1,2 +1,3 @@
-function Mesh() constructor {
+function Mesh(primitives) constructor {
+	self.primitives = primitives;
 }

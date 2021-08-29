@@ -44,8 +44,14 @@ function glTF(filename) constructor {
 		var meshes = array_create(meshes_count);
 	
 		for(var i = 0; i < meshes_count; i++) {
-			var mesh = new Mesh();
-			mesh.primitive = BuildPrimitive(json.meshes[i].primitives[0]);
+			var primitives_count = array_length(json.meshes[i].primitives);
+			var primitives = array_create(primitives_count);
+			
+			for(var j = 0; j < primitives_count; j++) {
+				primitives[j] = BuildPrimitive(json.meshes[i].primitives[j]);
+			}
+			
+			var mesh = new Mesh(primitives);
 			meshes[i] = mesh;
 		}
 		
