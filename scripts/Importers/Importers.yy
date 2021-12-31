@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Managers",
-    "path": "folders/Scripts/Managers.yy",
+    "name": "Scripts",
+    "path": "folders/Scripts.yy",
   },
   "resourceVersion": "1.0",
-  "name": "VertexFormatContainer_impl",
+  "name": "Importers",
   "tags": [],
   "resourceType": "GMScript",
 }

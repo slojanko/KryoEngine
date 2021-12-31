@@ -1,0 +1,3 @@
+function glTFImporter() constructor {
+
+}

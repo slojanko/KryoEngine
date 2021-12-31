@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Scripts.yy",
+    "name": "Managers",
+    "path": "folders/Scripts/Managers.yy",
   },
   "resourceVersion": "1.0",
   "name": "VertexFormatManager_impl",

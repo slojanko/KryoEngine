@@ -103,7 +103,8 @@ function glTF(filename) constructor {
 		vertex_begin(vertex_buffer, GetVertexFormat(primitive.attributes, attributes_names));
 		
 		// Go through all indices
-		for(var i = indices.accessor.count - 1; i >= 0; i--) {
+		var indices_count = indices.accessor.count;
+		for(var i = 0; i < indices_count; i++) {
 			// Read index value
 			var indices_byte_offset = indices.buffer_view.byteOffset + indices.accessor.byteOffset + i * indices.element_byte_size;
 			buffer_seek(buffers[indices.buffer_view.buffer], buffer_seek_start, indices_byte_offset);
